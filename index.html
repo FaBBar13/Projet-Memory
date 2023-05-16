@@ -15,13 +15,23 @@
         <p id="score"> Coups joués : 0 </p>
         <p id="temps"> Temps : 00:00  </p>
         <button id="boutonGo">GO</button>
-        <p id="info1">X</p>
-        <p id="info2">Y</p>
+        <fieldset><legend> Choisir le tableau : </legend>
+            
+            <input type="radio" id="nb6" name="btnRadio" value="6" checked><label for="nb6"> 3x4</label>
+            <input type="radio" id="nb8" name="btnRadio" value="8"><label for="nb8"> 4x4</label>
+            <input type="radio" id="nb10" name="btnRadio" value="10"><label for="nb10"> 5x4</label>
+            <input type="radio" id="nb12" name="btnRadio" value="12"><label for="nb12"> 6x4</label>
+        </fieldset>
+        <!-- <p id="info1">X</p>
+        <p id="info2">Y</p> -->
+        <button id="boutonStop" class="stop">STOP</button>
     </div>
-    <div id="resultat"><p id="res"></p></div>
+
+        <div id="resultat">
+            <p id="res"></p>
+        </div>
 
     <div class="page" id="page">
-
     </div>
 
 <script src="script.js"></script>

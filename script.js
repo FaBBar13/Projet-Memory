@@ -11,19 +11,34 @@ let paramIDCarte2 = '';
 
 let temps = document.getElementById("temps");
 let score = document.getElementById("score");
+let btnStop = document.getElementById("boutonStop");
 let minute = 0;
-let seconde = 55;
+let seconde = 0;
 
-let nbCartes = 3;
-let pairesTrouvees = nbCartes;
+let nbCartes = 0;
+let pairesTrouvees = '';
 let nbCoups = 0;
 let res = document.getElementById("res");
 //console.log(res);
 
+function choixCartes() {
+  let tabRadio = document.querySelectorAll("input");
+  console.log(tabRadio);
+  for (i=0; i< tabRadio.length ; i++) {
+    if (tabRadio[i].checked) {
+      nbCartes = tabRadio[i].value;
+      console.log('ici');
+    };
+  };
+  console.log(nbCartes);
+};
+//choixCartes();
+
+
 function monTimer() {
   let inter = setInterval(() => {
     seconde++;
-    if (seconde <=9) {
+    if (seconde <=9 ) {
       seconde = '0' + seconde;
     }
     else if (seconde == 0) {
@@ -33,18 +48,18 @@ function monTimer() {
       minute++;
       seconde=0;
       };
-    temps.innerHTML =  ' Temps : ' + '0' + minute + ':' + seconde;
+    temps.innerHTML =  ' Temps : ' + '0' + minute + ':' + seconde ;
 
-
-    if (minute == 2 ) {
+    if (minute == 1 ) {
       window.clearTimeout(inter);
     };
     if (pairesTrouvees == 0) {
-      console.log(pairesTrouvees);
+      console.log(" ici avec " + pairesTrouvees + " paires restantes");
       window.clearTimeout(inter);
     };
+    console.log(inter);
     },1000);
-}
+};
 
 function genereTable(paramNbCartes) {
   /* on remplit le tableau avec des N° au hasard entre 1 et nbCartes */
@@ -67,14 +82,14 @@ function genereTable(paramNbCartes) {
   let tabTmp2 = Object.values(stkCartes);
   let tabTmp3 = tabTmp.concat(tabTmp2);
 
-stkCartes.splice(0,stkCartes.length); // vidage du tableau initial
+  stkCartes.splice(0,stkCartes.length); // vidage du tableau initial
   nbTmp = tabTmp3.length;
   for (i=0; i < nbTmp ; i++) {
      let numHasard = Math.floor(Math.random()* (tabTmp3.length)   );
      stkCartes.push(tabTmp3[numHasard]);
      tabTmp3.splice(numHasard , 1);
    };
-}
+};
 
 function figerCartesLoose(id1 , id2) {
     setTimeout(() => {
@@ -85,26 +100,30 @@ function figerCartesLoose(id1 , id2) {
 
     document.getElementById(id1).classList.toggle('card-cliquee');
     document.getElementById(id2).classList.toggle('card-cliquee');
+    // document.getElementById("page").style = " pointer-events : auto;";
 
     CacheCarte(id1);
     CacheCarte(id2);
 
-   }, 2000);
+   }, 1500);
 };
 
 function figerCartesWin(id1 , id2) {
    setTimeout(() => {
 
    document.getElementById("page").style = "border : solid 1px black";
-   res.innerText = "";
    document.getElementById(id1).style = "opacity : 0.7;";
    document.getElementById(id1).style = "pointer-events : none;";
    document.getElementById(id1).style = "scale : 0.8;";
    document.getElementById(id2).style = "opacity : 0.7;";
    document.getElementById(id2).style = "pointer-events : none;";
    document.getElementById(id2).style = "scale : 0.8;";
+   // document.getElementById("page").style = " pointer-events : auto;";
 
-  }, 2000);
+   if (pairesTrouvees != 0 )  {
+    res.innerText = "";
+   }
+  }, 1500);
 };
 
 function MontreCarte (id1) {
@@ -114,15 +133,48 @@ function CacheCarte (id1) {
   document.getElementById(id1).style ="transform : rotateY(-360deg);";
 }
 
- genereTable(nbCartes);
+ //genereTable(nbCartes);
  console.log(stkCartes);
+
+btnStop.addEventListener("click", function() {
+    // stopper timer et ré-init de la page
+    
+    // suppr. tableau existant
+    ctrlExist() // vidage div
+    res.style = "color:red;";
+     res.innerText = "...Partie Annulée :-( ...";
+     document.getElementById("boutonGo").style = "visibility : visible";
+     btnStop.style = "visibility : hidden";
+     // On regenere le tableau 'initial' apres vidage de la div
+     stkCartes.splice(0,stkCartes.length);
+     genereTable(nbCartes);
+    pairesTrouvees = -1; // stoppe le timer
+    seconde = 0;
+    minute = 0;
+    nbCoups = 0;
+    //temps.innerHTML =  ' Temps : ' + '0' + minute + ':' + seconde ;
+
+});
 
 document.getElementById("boutonGo").addEventListener("click", function() 
     {
-    // monTimer();
-    // genereTable(nbCartes);
-    // console.log(stkCartes);
-    creerCartes(nbCartes*2);
+      choixCartes();
+      // nbCartes = 2;
+      ctrlExist() // vidage div
+      btnStop.style = "visibility : visible";
+      document.getElementById("boutonGo").style = "visibility : hidden";
+      seconde = 0;
+      minute = 0;
+      nbCoups = 0;
+      pairesTrouvees = nbCartes;
+      
+      // monTimer();
+      
+      stkCartes.splice(0,stkCartes.length); // vidage du tableau au cas ou
+      genereTable(nbCartes);                // remplissage du tableau
+      res.innerText = "";
+      creerCartes(nbCartes*2);
+      console.log(stkCartes);
     }
 );
 
@@ -138,7 +190,7 @@ function ctrlExist() {
    };
 }
 
-/* retourner carte  */ 
+/* selection carte  */ 
 function retourneCarte(paramID)  {
 
 nbCoups++;
@@ -168,10 +220,9 @@ score.innerHTML = 'Coups joués : ' + nbCoups;
       document.getElementById(paramIDCarte2).classList.toggle('card-cliquee');
       MontreCarte(paramIDCarte2);
       
-      
         if ( nomImgCarte1 == nomImgCarte2) 
           {
-            document.getElementById("page").style = "border : solid 3px green";
+            document.getElementById("page").style = " border : solid 3px green";
             res.style = "color:green;";
             res.innerText = "BRAVO";
             figerCartesWin(paramIDCarte1 , paramIDCarte2);
@@ -204,22 +255,25 @@ score.innerHTML = 'Coups joués : ' + nbCoups;
             nomImgCarte2 = ''; 
             paramIDCarte2 = '';
           }
-    }
-  
-//document.getElementById("info1").innerHTML = " 1 = "+ nomImgCarte1 + " / " + posIndCarte1;
-//document.getElementById("info2").innerHTML = " 2 = "+ nomImgCarte2 + " / " + posIndCarte1;
+    };
 
- if (pairesTrouvees == 0) {
-  console.log('GAME OVER');
- }
 
+    if (pairesTrouvees == 0) 
+    {
+     document.getElementById("page").style = "border : solid 3px green";
+     res.style = "color : green";
+     res.style = "font-size : 30px;";
+     res.innerHTML = "...Quel talent ! " + nbCartes + " paires trouvées en " + nbCoups + " coups et en    " + minute + "min. et " + seconde + " seconde(s) !!";
+     btnStop.style = "visibility : hidden";
+     document.getElementById("boutonGo").style = "visibility : visible";
+     console.log('GAME OVER');
+    };
 }
-
 
 
 function creerCartes (param1) {
 
-  ctrlExist();
+  // ctrlExist();
 
   for (i=1 ; i <= nbCartes*2 ; i++) 
   { 
