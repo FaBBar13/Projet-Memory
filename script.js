@@ -151,6 +151,8 @@ btnStop.addEventListener("click", function() {
      // On regenere le tableau 'initial' apres vidage de la div
      stkCartes.splice(0,stkCartes.length);
      genereTable(nbCartes);
+
+     
     pairesTrouvees = -1; // stoppe le timer
     seconde = 0;
     minute = 0;
