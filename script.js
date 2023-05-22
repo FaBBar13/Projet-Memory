@@ -12,6 +12,7 @@ let paramIDCarte2 = '';
 let temps = document.getElementById("temps");
 let score = document.getElementById("score");
 let btnStop = document.getElementById("boutonStop");
+let page = document.getElementById("page");
 let minute = 0;
 let seconde = 0;
 
@@ -19,6 +20,7 @@ let nbCartes = 0;
 let pairesTrouvees = '';
 let nbCoups = 0;
 let res = document.getElementById("res");
+let cartesRetournees = [];
 //console.log(res);
 
 function choixCartes() {
@@ -61,63 +63,64 @@ function monTimer() {
     },1000);
 };
 
-function genereTable(paramNbCartes) {
+
+
+function genereTable(pairs) {
   /* on remplit le tableau avec des N° au hasard entre 1 et nbCartes */
   
-  let compteur = 0;
-  
-  while (compteur < nbCartes) {
-    let numHasard = Math.floor(Math.random()* (nbCartes) +1   );
-    if (stkCartes.includes(numHasard)) {
-          compteur--;  
-         }
-    else {
-      stkCartes.push(numHasard);
-    };
-    compteur++;
+
+  let list = [], resultat = [];
+
+  for(let i=1;i<=pairs;i++){
+    for(let j=0; j<2; j++){
+      list.push(i);
+    }
   }
+  // console.log(list);
 
-  /* tableau-copie pour dupliquer les N°  ! */
-  let tabTmp = Object.values(stkCartes);
-  let tabTmp2 = Object.values(stkCartes);
-  let tabTmp3 = tabTmp.concat(tabTmp2);
+  while(list.length >0){
 
-  stkCartes.splice(0,stkCartes.length); // vidage du tableau initial
-  nbTmp = tabTmp3.length;
-  for (i=0; i < nbTmp ; i++) {
-     let numHasard = Math.floor(Math.random()* (tabTmp3.length)   );
-     stkCartes.push(tabTmp3[numHasard]);
-     tabTmp3.splice(numHasard , 1);
-   };
+    let rnd = Math.floor( Math.random()* list.length);
+    resultat.push(list[rnd]);
+    list.splice(rnd,1);
+  }
+console.log(resultat);
+return resultat;
 };
 
-function figerCartesLoose(id1 , id2) {
-    setTimeout(() => {
-    
-    document.getElementById("page").style = "border : solid 1px black";
-    res.innerText = "";
-    
+function figerCartesLoose(carte1 , carte2) {
 
-    document.getElementById(id1).classList.toggle('card-cliquee');
-    document.getElementById(id2).classList.toggle('card-cliquee');
+page.classList.add('disabled');
+
+    setTimeout(() => {
+      page.classList.remove('disabled');
+    
+   page.style = "border : solid 1px black";
+    res.innerText = "";
+ 
+    carte1.classList.remove('card-cliquee');
+    carte2.classList.remove('card-cliquee');
     // document.getElementById("page").style = " pointer-events : auto;";
 
-    CacheCarte(id1);
-    CacheCarte(id2);
+    // CacheCarte(id1);
+    // CacheCarte(id2);
 
    }, 1500);
 };
 
-function figerCartesWin(id1 , id2) {
+function figerCartesWin(carte1 , carte2) {
    setTimeout(() => {
 
-   document.getElementById("page").style = "border : solid 1px black";
-   document.getElementById(id1).style = "opacity : 0.7;";
-   document.getElementById(id1).style = "pointer-events : none;";
-   document.getElementById(id1).style = "scale : 0.8;";
-   document.getElementById(id2).style = "opacity : 0.7;";
-   document.getElementById(id2).style = "pointer-events : none;";
-   document.getElementById(id2).style = "scale : 0.8;";
+   page.style = "border : solid 1px black";
+   carte1.classList.add("card-win");
+   carte2.classList.add("card-win");
+   carte1.classList.remove('card-cliquee');
+   carte2.classList.remove('card-cliquee');
+  //  document.getElementById(id1).style = "pointer-events : none;";
+  //  document.getElementById(id1).style = "scale : 0.8;";
+  //  document.getElementById(id2).style = "opacity : 0.7;";
+  //  document.getElementById(id2).style = "pointer-events : none;";
+  //  document.getElementById(id2).style = "scale : 0.8;";
    // document.getElementById("page").style = " pointer-events : auto;";
 
    if (pairesTrouvees != 0 )  {
@@ -134,7 +137,7 @@ function CacheCarte (id1) {
 }
 
  //genereTable(nbCartes);
- console.log(stkCartes);
+//  console.log(stkCartes);
 
 btnStop.addEventListener("click", function() {
     // stopper timer et ré-init de la page
@@ -153,13 +156,12 @@ btnStop.addEventListener("click", function() {
     minute = 0;
     nbCoups = 0;
     //temps.innerHTML =  ' Temps : ' + '0' + minute + ':' + seconde ;
-
 });
 
 document.getElementById("boutonGo").addEventListener("click", function() 
     {
-      choixCartes();
-      // nbCartes = 2;
+      // choixCartes();
+      nbCartes = 2;
       ctrlExist() // vidage div
       btnStop.style = "visibility : visible";
       document.getElementById("boutonGo").style = "visibility : hidden";
@@ -170,11 +172,10 @@ document.getElementById("boutonGo").addEventListener("click", function()
       
       // monTimer();
       
-      stkCartes.splice(0,stkCartes.length); // vidage du tableau au cas ou
-      genereTable(nbCartes);                // remplissage du tableau
+      stkCartes=genereTable(nbCartes);                // remplissage du tableau
       res.innerText = "";
-      creerCartes(nbCartes*2);
-      console.log(stkCartes);
+      creerCartes(stkCartes);
+      // console.log(stkCartes);
     }
 );
 
@@ -190,11 +191,63 @@ function ctrlExist() {
    };
 }
 
+
+
+function flipCarte(elem){
+
+
+  if(!cartesRetournees.includes(elem)){
+    cartesRetournees.push(elem);
+    //elem.style ="transform : rotateY(-180deg);";
+    elem.classList.add('card-cliquee');
+
+
+    if(cartesRetournees.length === 2){
+      nbCoups++;
+      const [one, two] = cartesRetournees;
+
+      if(one.dataset.id === two.dataset.id){
+
+        figerCartesWin(one, two);
+        document.getElementById("page").style = " border : solid 3px green";
+        res.style = "color:green;";
+        res.innerText = "BRAVO";
+        cartesRetournees = [];
+        pairesTrouvees--;
+      }
+      else {
+        figerCartesLoose(one, two);
+        document.getElementById("page").style = "border : solid 3px red";
+        res.style = "color:red;";
+        res.innerText = "...Dommage...";
+        cartesRetournees = [];
+      }
+    }
+  }
+  score.innerHTML = 'Coups joués : ' + nbCoups;
+
+  if (pairesTrouvees == 0) 
+    {
+     document.getElementById("page").style = "border : solid 3px green;";
+     res.style = "color : green;";
+     res.style = "font-size : 30px;";
+     res.innerHTML = "...Quel talent ! " + nbCartes + " paires trouvées en " + nbCoups + " coups et en    " + minute + "min. et " + seconde + " seconde(s) !!";
+     btnStop.style = "visibility : hidden";
+     document.getElementById("boutonGo").style = "visibility : visible";
+     console.log('GAME OVER');
+    };
+
+
+}
+
+
+
 /* selection carte  */ 
 function retourneCarte(paramID)  {
 
 nbCoups++;
 score.innerHTML = 'Coups joués : ' + nbCoups;
+     
 
   if (paramID == paramIDCarte1) {
     //CacheCarte(paramID);
@@ -209,17 +262,20 @@ score.innerHTML = 'Coups joués : ' + nbCoups;
       carteRetournee = "O";
       MontreCarte(paramIDCarte1);
       document.getElementById(paramIDCarte1).classList.toggle('card-cliquee');
+      // console.log('1 = ' + posIndCarte1 + ' / ' + nomImgCarte1 + ' / ' + paramIDCarte1);
       }
-
+      
     // On compare les 2 cartes selectionnées 
     else 
+
       {
       posIndCarte2 = paramID.charAt(paramID.length-1)-1;;
       nomImgCarte2 = stkCartes[posIndCarte2] ; 
       paramIDCarte2 = paramID;
+      // console.log('2 = ' + posIndCarte2 + ' / ' + nomImgCarte2 + ' / ' + paramIDCarte2);
       document.getElementById(paramIDCarte2).classList.toggle('card-cliquee');
       MontreCarte(paramIDCarte2);
-      
+ 
         if ( nomImgCarte1 == nomImgCarte2) 
           {
             document.getElementById("page").style = " border : solid 3px green";
@@ -251,17 +307,20 @@ score.innerHTML = 'Coups joués : ' + nbCoups;
             posIndCarte1 = '';
             nomImgCarte1 = '' ; 
             paramIDCarte1 = '';
+            
             posIndCarte2 = '';
             nomImgCarte2 = ''; 
             paramIDCarte2 = '';
           }
-    };
+     };
 
+//document.getElementById('info1').innerText = '1 = ' + posIndCarte1 + ' / ' + nomImgCarte1 + ' / ' + paramIDCarte1;
+//document.getElementById('info2').innerText = '1 = ' + posIndCarte2 + ' / ' + nomImgCarte2 + ' / ' + paramIDCarte2;
 
     if (pairesTrouvees == 0) 
     {
-     document.getElementById("page").style = "border : solid 3px green";
-     res.style = "color : green";
+     document.getElementById("page").style = "border : solid 3px green;";
+     res.style = "color : green;";
      res.style = "font-size : 30px;";
      res.innerHTML = "...Quel talent ! " + nbCartes + " paires trouvées en " + nbCoups + " coups et en    " + minute + "min. et " + seconde + " seconde(s) !!";
      btnStop.style = "visibility : hidden";
@@ -271,14 +330,17 @@ score.innerHTML = 'Coups joués : ' + nbCoups;
 }
 
 
-function creerCartes (param1) {
+function creerCartes (ids) {
 
   // ctrlExist();
-
-  for (i=1 ; i <= nbCartes*2 ; i++) 
-  { 
     /* container de carte */
     const divCible = document.getElementById("page");
+
+  for (i= 0; i < ids.length ; i++) 
+  { 
+
+    let indexCarte = ids[i], id= 'card' + (i+1);
+    
     const divContainer = document.createElement("div");
     divContainer.classList.add("card-container");
     divCible.appendChild(divContainer);
@@ -286,8 +348,21 @@ function creerCartes (param1) {
     /* carte */
     const divCarte = document.createElement("div");
     divCarte.classList.add("card");
-    divCarte.setAttribute("id",("card"+i));
-    divCarte.setAttribute("onclick","retourneCarte(this.id);");
+    divCarte.setAttribute("id",id);
+    divCarte.dataset.id = indexCarte;
+
+    divCarte.addEventListener('click', e =>flipCarte(divCarte));
+    // équivaut à :
+    // e=>{
+    //   return flipCarte(divCarte);
+    // }
+
+    // sinon ca aurait pu etre ca : 
+    // divCarte.onclick = function(){
+    //   flipCarte(divCarte);
+    // };
+
+    //divCarte.setAttribute("onclick","retourneCarte(this.id);");
     divContainer.appendChild(divCarte);
 
     /* carte derriere */
@@ -297,7 +372,7 @@ function creerCartes (param1) {
 
     /* image derriere */ 
     const imgBack = document.createElement("img");
-    imgBack.src = "/images/dos-carte2.jpg";
+    imgBack.src = "./images/dos-carte2.jpg";
     imgBack.classList.add("image-carte");
     cardBack.appendChild(imgBack);
 
@@ -309,8 +384,8 @@ function creerCartes (param1) {
     
     /* image devant */
     const imgFront = document.createElement("img");
-    let numImg = stkCartes[i-1];          /* i-1 pour aller chercher index 0 */
-    imgFront.src = "/images/" + (numImg) + '.jpg';
+    let numImg = stkCartes[i];          
+    imgFront.src = "./images/" + (numImg) + '.jpg';
     imgFront.classList.add("image-carte");
     cardFront.appendChild(imgFront);
 

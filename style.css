@@ -112,10 +112,10 @@ button {
     width: 100%;
     transition: all 0.3s ease;
     /* transform-style: preserve-3d; */
-    pointer-events: auto;
+    /* pointer-events: auto; */
 }
 
-.card-container:hover .card {
+.card-container:hover .card:not(.card-win) {
     scale : 1.2;
 }
 
@@ -123,14 +123,25 @@ button {
     position: relative;
     height: 100%;
     width: 100%;
-    transition: all 0.3s ease;
+    transition: transform .3s ease;
     transform-style: preserve-3d;
-    pointer-events: auto;
+    /* pointer-events: auto; */
 }
 
 .card-cliquee {
-    scale : 1.2;
+    transform : rotateY(-180deg) scale(1.2);
     pointer-events : none;
+}
+
+.card-win {
+    /* transform : rotateY(-180deg) scale(1.2); */
+    transform : rotateY(-180deg) scale(0.8);
+    pointer-events : none;
+}
+
+
+.disabled {
+    pointer-events: none !important;
 }
 
 .card-front {
