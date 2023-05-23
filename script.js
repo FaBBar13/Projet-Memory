@@ -7,8 +7,10 @@ let res = document.getElementById("res");
 let btnStop = document.getElementById("boutonStop");
 let page = document.getElementById("page");
 
+let monInterval = null;
 let minute = 0;
 let seconde = 0;
+let afficheTimer = ' Temps : 00:00';
 
 let nbCartes = 0;
 let pairesTrouvees = '';
@@ -30,32 +32,33 @@ function choixCartes() {
 };
 //choixCartes();
 
+function finTimer() {
+  clearInterval(monInterval);
+}
 
-function monTimer() {
-  let inter = setInterval(() => {
-    seconde++;
-    if (seconde <=9 ) {
-      seconde = '0' + seconde;
-    }
-    else if (seconde == 0) {
-      seconde = '00';
-    };
-    if (seconde == 60) {
-      minute++;
-      seconde=0;
-      };
-    temps.innerHTML =  ' Temps : ' + '0' + minute + ':' + seconde ;
+function secondePlus() {
+  seconde++;
+  if (seconde == 60) {
+    seconde = 0;
+    minute++;
+  };
+  if (minute == 2) {
+    finTimer();
+  };
+  if (seconde<10) {
+    afficheTimer = ' Temps : 0' + minute + ':0' + seconde;
+  }
+  else {
+    afficheTimer = ' Temps : 0' + minute + ':' + seconde;
+  }
+  temps.innerHTML =  afficheTimer ;
+  console.log('=> ' + seconde)
+}
 
-    if (minute == 1 ) {
-      window.clearTimeout(inter);
-    };
-    if (pairesTrouvees == 0) {
-      console.log(" ici avec " + pairesTrouvees + " paires restantes");
-      window.clearTimeout(inter);
-    };
-    console.log(inter);
-    },1000);
-};
+function debutTimer() {
+  monInterval = setInterval(secondePlus,1000);
+}
+
 
 
 function genereTable(paires) {
@@ -110,11 +113,11 @@ function figerCartesWin(carte1 , carte2) {
 };
 
 
-// console.log(stkCartes);
+
 
 btnStop.addEventListener("click", function() {
     // stopper timer et ré-init de la page
-    
+    finTimer();
     // suppr. tableau existant
     ctrlExist() // vidage div
     res.style = "color:red;";
@@ -133,22 +136,27 @@ btnStop.addEventListener("click", function() {
 
 document.getElementById("boutonGo").addEventListener("click", function() 
     {
-      // choixCartes();
-      nbCartes = 2;
+      choixCartes();
+      //nbCartes = 3;
       ctrlExist() // vidage div
       btnStop.style = "visibility : visible";
       document.getElementById("boutonGo").style = "visibility : hidden";
 
-      seconde,minute,nbCoups = 0;
+      temps.innerHTML =  ' Temps : 00:00 ' ;
+      score.innerHTML = 'Coups joués : 0 ';
+      afficheTimer = ' Temps : 00:00';
+
+      seconde = 0 ;
+      minute = 0 ;
+      nbCoups = 0;
       res.innerText = "";
       pairesTrouvees = nbCartes;
       
-      // monTimer();
+      debutTimer();
       
       stkCartes=genereTable(nbCartes); // remplissage du tableau
       creerCartes(stkCartes);          // 
       
-      // console.log(stkCartes);
     }
 );
 
@@ -200,13 +208,14 @@ function flipCarte(elem){
 
   if (pairesTrouvees == 0) 
     {
+     finTimer();
      document.getElementById("page").style = "border : solid 3px green;";
-     //res.style = "color:blue;";
      res.style = "font-size:30px;";
      res.innerHTML = "...Quel talent ! " + nbCartes + " paires trouvées en " + nbCoups + " coups et en " + minute + "min. et " + seconde + " seconde(s) !!";
      btnStop.style = "visibility : hidden";
      document.getElementById("boutonGo").style = "visibility : visible";
      console.log('GAME OVER');
+
     };
 
 }
