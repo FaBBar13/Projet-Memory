@@ -25,10 +25,10 @@ function choixCartes() {
   for (i=0; i< tabRadio.length ; i++) {
     if (tabRadio[i].checked) {
       nbCartes = tabRadio[i].value;
-      console.log('ici');
+      //console.log('ici');
     };
   };
-  console.log(nbCartes);
+  //console.log(nbCartes);
 };
 //choixCartes();
 
@@ -42,6 +42,7 @@ function secondePlus() {
     seconde = 0;
     minute++;
   };
+  // sécurité enfant sur le timer....
   if (minute == 2) {
     finTimer();
   };
@@ -52,7 +53,7 @@ function secondePlus() {
     afficheTimer = ' Temps : 0' + minute + ':' + seconde;
   }
   temps.innerHTML =  afficheTimer ;
-  console.log('=> ' + seconde)
+  // console.log('=> ' + seconde)
 }
 
 function debutTimer() {
@@ -63,18 +64,38 @@ function debutTimer() {
 
 function genereTable(paires) {
   /* on remplit le tableau avec des N° au hasard entre 1 et paires  */
-  
   let list = [], resultat = [];
+  // for(let i=1;i<=paires;i++){
+  //   for(let j=0; j<2; j++){
+  //     list.push(i);
+  //   }
+  //  }
 
-  for(let i=1;i<=paires;i++){
-    for(let j=0; j<2; j++){
-      list.push(i);
+  let listeImg = ['autumn','beach','cat','dog','eagle','field','flowers','forest','grass','hills','honey','hummingbird','kingfisher','lion','lynx',
+  'moon','mountains','owl','rose','sea','sunset','swamp','sweden','tower','tree-mirror','trees','water','waterfall','winnats',
+  'woman-sea','woman','zebra'];
+
+  for ( let j = 1 ; j <= paires ; j++ ) {
+    for (let i = 1 ; i<24 ;i++) {
+      rnum = Math.floor( Math.random() * listeImg.length);
+      list.push(listeImg[i]);
+    };
+  } ;
+
+  /*
+  for (let i = 1 ; i <= paires ;i++) {
+    let rnum = Math.floor( Math.random() * listeImg.length);
+    for ( let j = 0 ; j < 2 ; j++) {
+      list.push(listeImg[i]);
     }
-  }
+  };*/
+
+
+
 
   while(list.length >0){
 
-    let rnd = Math.floor( Math.random()* list.length);
+    let rnd = Math.floor( Math.random() * list.length);
     resultat.push(list[rnd]);
     list.splice(rnd,1);
   }
@@ -136,8 +157,8 @@ btnStop.addEventListener("click", function() {
 
 document.getElementById("boutonGo").addEventListener("click", function() 
     {
-      choixCartes();
-      //nbCartes = 3;
+      //choixCartes();
+      nbCartes = 3;
       ctrlExist() // vidage div
       btnStop.style = "visibility : visible";
       document.getElementById("boutonGo").style = "visibility : hidden";
@@ -211,107 +232,18 @@ function flipCarte(elem){
      finTimer();
      document.getElementById("page").style = "border : solid 3px green;";
      res.style = "font-size:30px;";
-     res.innerHTML = "...Quel talent ! " + nbCartes + " paires trouvées en " + nbCoups + " coups et en " + minute + "min. et " + seconde + " seconde(s) !!";
-     btnStop.style = "visibility : hidden";
-     document.getElementById("boutonGo").style = "visibility : visible";
-     console.log('GAME OVER');
-
-    };
-
-}
-
-/* selection carte  */ 
-/*
-function retourneCarte(paramID)  {
-
-nbCoups++;
-score.innerHTML = 'Coups joués : ' + nbCoups;
-     
-
-  if (paramID == paramIDCarte1) {
-    //CacheCarte(paramID);
-    return;
-  }
-    if (carteRetournee === "N") 
-      {
-      posIndCarte1 = paramID.charAt(paramID.length-1)-1;;
-      nomImgCarte1 = stkCartes[posIndCarte1] ; 
-      paramIDCarte1 = paramID;
-
-      carteRetournee = "O";
-      MontreCarte(paramIDCarte1);
-      document.getElementById(paramIDCarte1).classList.toggle('card-cliquee');
-      // console.log('1 = ' + posIndCarte1 + ' / ' + nomImgCarte1 + ' / ' + paramIDCarte1);
-      }
-      
-    // On compare les 2 cartes selectionnées 
-    else 
-
-      {
-      posIndCarte2 = paramID.charAt(paramID.length-1)-1;;
-      nomImgCarte2 = stkCartes[posIndCarte2] ; 
-      paramIDCarte2 = paramID;
-      // console.log('2 = ' + posIndCarte2 + ' / ' + nomImgCarte2 + ' / ' + paramIDCarte2);
-      document.getElementById(paramIDCarte2).classList.toggle('card-cliquee');
-      MontreCarte(paramIDCarte2);
- 
-        if ( nomImgCarte1 == nomImgCarte2) 
-          {
-            document.getElementById("page").style = " border : solid 3px green";
-            res.style = "color:green;";
-            res.innerText = "BRAVO";
-            figerCartesWin(paramIDCarte1 , paramIDCarte2);
-
-            console.log('GAGNE');
-            carteRetournee = "N";
-            posIndCarte1 = '';
-            nomImgCarte1 = '' ; 
-            paramIDCarte1 = '';
-            posIndCarte2 = '';
-            nomImgCarte2 = ''; 
-            paramIDCarte2 = '';
-            pairesTrouvees--;
-          }
-        else 
-          {
-            // on temporise pour afficher la 2ème carte et les re-masquer
-            document.getElementById("page").style = "border : solid 3px red";
-            res.style = "color:red;";
-            res.innerText = "...Dommage...";
-
-            figerCartesLoose(paramIDCarte1 , paramIDCarte2);
-
-            console.log('PERDU');
-            carteRetournee = "N";
-            posIndCarte1 = '';
-            nomImgCarte1 = '' ; 
-            paramIDCarte1 = '';
-            
-            posIndCarte2 = '';
-            nomImgCarte2 = ''; 
-            paramIDCarte2 = '';
-          }
-     };
-
-//document.getElementById('info1').innerText = '1 = ' + posIndCarte1 + ' / ' + nomImgCarte1 + ' / ' + paramIDCarte1;
-//document.getElementById('info2').innerText = '1 = ' + posIndCarte2 + ' / ' + nomImgCarte2 + ' / ' + paramIDCarte2;
-
-    if (pairesTrouvees == 0) 
-    {
-     document.getElementById("page").style = "border : solid 3px green;";
-     res.style = "color : green;";
-     res.style = "font-size : 30px;";
-     res.innerHTML = "...Quel talent ! " + nbCartes + " paires trouvées en " + nbCoups + " coups et en    " + minute + "min. et " + seconde + " seconde(s) !!";
+     res.innerHTML = "...Quel talent ! " + nbCartes + " paires trouvées en " + nbCoups + " coups et en " + minute + " min. et " + seconde + " seconde(s) !!";
      btnStop.style = "visibility : hidden";
      document.getElementById("boutonGo").style = "visibility : visible";
      console.log('GAME OVER');
     };
+
 }
-*/
+
+
 
 function creerCartes (ids) {
 
-  // ctrlExist();
     /* container de carte */
     const divCible = document.getElementById("page");
 
@@ -353,7 +285,7 @@ function creerCartes (ids) {
 
     /* image derriere */ 
     const imgBack = document.createElement("img");
-    imgBack.src = "./images/dos-carte2.jpg";
+    imgBack.src = "./images2/dos-carte2.jpg";
     imgBack.classList.add("image-carte");
     cardBack.appendChild(imgBack);
 
@@ -365,7 +297,7 @@ function creerCartes (ids) {
     /* image devant */
     const imgFront = document.createElement("img");
     let numImg = stkCartes[i];          
-    imgFront.src = "./images/" + (numImg) + '.jpg';
+    imgFront.src = "./images2/" + (numImg) + '.jpg';
     imgFront.classList.add("image-carte");
     cardFront.appendChild(imgFront);
   }
