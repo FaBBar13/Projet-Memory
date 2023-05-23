@@ -1,27 +1,21 @@
 
 let stkCartes = [];
 
-let carteRetournee = "N";
-let posIndCarte1 = '';
-let nomImgCarte1 = '' ; 
-let paramIDCarte1 = '';
-let posIndCarte2 = '';
-let nomImgCarte2 = ''; 
-let paramIDCarte2 = '';
-
 let temps = document.getElementById("temps");
 let score = document.getElementById("score");
+let res = document.getElementById("res");
 let btnStop = document.getElementById("boutonStop");
 let page = document.getElementById("page");
+
 let minute = 0;
 let seconde = 0;
 
 let nbCartes = 0;
 let pairesTrouvees = '';
 let nbCoups = 0;
-let res = document.getElementById("res");
+
 let cartesRetournees = [];
-//console.log(res);
+
 
 function choixCartes() {
   let tabRadio = document.querySelectorAll("input");
@@ -64,19 +58,16 @@ function monTimer() {
 };
 
 
-
-function genereTable(pairs) {
-  /* on remplit le tableau avec des N° au hasard entre 1 et nbCartes */
+function genereTable(paires) {
+  /* on remplit le tableau avec des N° au hasard entre 1 et paires  */
   
-
   let list = [], resultat = [];
 
-  for(let i=1;i<=pairs;i++){
+  for(let i=1;i<=paires;i++){
     for(let j=0; j<2; j++){
       list.push(i);
     }
   }
-  // console.log(list);
 
   while(list.length >0){
 
@@ -94,16 +85,11 @@ page.classList.add('disabled');
 
     setTimeout(() => {
       page.classList.remove('disabled');
-    
-   page.style = "border : solid 1px black";
-    res.innerText = "";
+ 
+      res.innerText = "" ;
  
     carte1.classList.remove('card-cliquee');
     carte2.classList.remove('card-cliquee');
-    // document.getElementById("page").style = " pointer-events : auto;";
-
-    // CacheCarte(id1);
-    // CacheCarte(id2);
 
    }, 1500);
 };
@@ -116,12 +102,6 @@ function figerCartesWin(carte1 , carte2) {
    carte2.classList.add("card-win");
    carte1.classList.remove('card-cliquee');
    carte2.classList.remove('card-cliquee');
-  //  document.getElementById(id1).style = "pointer-events : none;";
-  //  document.getElementById(id1).style = "scale : 0.8;";
-  //  document.getElementById(id2).style = "opacity : 0.7;";
-  //  document.getElementById(id2).style = "pointer-events : none;";
-  //  document.getElementById(id2).style = "scale : 0.8;";
-   // document.getElementById("page").style = " pointer-events : auto;";
 
    if (pairesTrouvees != 0 )  {
     res.innerText = "";
@@ -129,15 +109,8 @@ function figerCartesWin(carte1 , carte2) {
   }, 1500);
 };
 
-function MontreCarte (id1) {
-  document.getElementById(id1).style ="transform : rotateY(-180deg);";
-}
-function CacheCarte (id1) {
-  document.getElementById(id1).style ="transform : rotateY(-360deg);";
-}
 
- //genereTable(nbCartes);
-//  console.log(stkCartes);
+// console.log(stkCartes);
 
 btnStop.addEventListener("click", function() {
     // stopper timer et ré-init de la page
@@ -145,13 +118,13 @@ btnStop.addEventListener("click", function() {
     // suppr. tableau existant
     ctrlExist() // vidage div
     res.style = "color:red;";
-     res.innerText = "...Partie Annulée :-( ...";
-     document.getElementById("boutonGo").style = "visibility : visible";
-     btnStop.style = "visibility : hidden";
+    res.innerText = "...Partie Annulée :-( ...";
+    document.getElementById("boutonGo").style = "visibility : visible";
+    btnStop.style = "visibility : hidden";
      // On regenere le tableau 'initial' apres vidage de la div
      stkCartes.splice(0,stkCartes.length);
      genereTable(nbCartes);
-    pairesTrouvees = -1; // stoppe le timer
+    //pairesTrouvees = -1; // stoppe le timer
     seconde = 0;
     minute = 0;
     nbCoups = 0;
@@ -165,16 +138,16 @@ document.getElementById("boutonGo").addEventListener("click", function()
       ctrlExist() // vidage div
       btnStop.style = "visibility : visible";
       document.getElementById("boutonGo").style = "visibility : hidden";
-      seconde = 0;
-      minute = 0;
-      nbCoups = 0;
+
+      seconde,minute,nbCoups = 0;
+      res.innerText = "";
       pairesTrouvees = nbCartes;
       
       // monTimer();
       
-      stkCartes=genereTable(nbCartes);                // remplissage du tableau
-      res.innerText = "";
-      creerCartes(stkCartes);
+      stkCartes=genereTable(nbCartes); // remplissage du tableau
+      creerCartes(stkCartes);          // 
+      
       // console.log(stkCartes);
     }
 );
@@ -192,20 +165,19 @@ function ctrlExist() {
 }
 
 
-
+// fonction Aymeric
 function flipCarte(elem){
 
-
+  // si le tableau ne contient pas l'element cliqué, on l'insère ds le tableau
   if(!cartesRetournees.includes(elem)){
     cartesRetournees.push(elem);
-    //elem.style ="transform : rotateY(-180deg);";
     elem.classList.add('card-cliquee');
 
-
+    // 2 cartes cliquées 
     if(cartesRetournees.length === 2){
       nbCoups++;
       const [one, two] = cartesRetournees;
-
+      // comparaison des data-id
       if(one.dataset.id === two.dataset.id){
 
         figerCartesWin(one, two);
@@ -229,20 +201,18 @@ function flipCarte(elem){
   if (pairesTrouvees == 0) 
     {
      document.getElementById("page").style = "border : solid 3px green;";
-     res.style = "color : green;";
-     res.style = "font-size : 30px;";
-     res.innerHTML = "...Quel talent ! " + nbCartes + " paires trouvées en " + nbCoups + " coups et en    " + minute + "min. et " + seconde + " seconde(s) !!";
+     //res.style = "color:blue;";
+     res.style = "font-size:30px;";
+     res.innerHTML = "...Quel talent ! " + nbCartes + " paires trouvées en " + nbCoups + " coups et en " + minute + "min. et " + seconde + " seconde(s) !!";
      btnStop.style = "visibility : hidden";
      document.getElementById("boutonGo").style = "visibility : visible";
      console.log('GAME OVER');
     };
 
-
 }
 
-
-
 /* selection carte  */ 
+/*
 function retourneCarte(paramID)  {
 
 nbCoups++;
@@ -328,7 +298,7 @@ score.innerHTML = 'Coups joués : ' + nbCoups;
      console.log('GAME OVER');
     };
 }
-
+*/
 
 function creerCartes (ids) {
 
@@ -349,20 +319,22 @@ function creerCartes (ids) {
     const divCarte = document.createElement("div");
     divCarte.classList.add("card");
     divCarte.setAttribute("id",id);
-    divCarte.dataset.id = indexCarte;
+    divCarte.dataset.id = indexCarte;// ajout d'un data-id
 
+    // au lieu d'ajouter divCarte.setAttribute("onclick","retourneCarte(this.id);") ou
+    // ("onclick","flipCarte(this.id);") , 
+    // on ajoute un listener click sur la carte cible
     divCarte.addEventListener('click', e =>flipCarte(divCarte));
+    //
     // équivaut à :
     // e=>{
     //   return flipCarte(divCarte);
     // }
-
+    //
     // sinon ca aurait pu etre ca : 
     // divCarte.onclick = function(){
     //   flipCarte(divCarte);
     // };
-
-    //divCarte.setAttribute("onclick","retourneCarte(this.id);");
     divContainer.appendChild(divCarte);
 
     /* carte derriere */
@@ -376,7 +348,6 @@ function creerCartes (ids) {
     imgBack.classList.add("image-carte");
     cardBack.appendChild(imgBack);
 
-
     /* carte devant */
     const cardFront = document.createElement("div");
     cardFront.classList.add("card-front")
@@ -388,7 +359,5 @@ function creerCartes (ids) {
     imgFront.src = "./images/" + (numImg) + '.jpg';
     imgFront.classList.add("image-carte");
     cardFront.appendChild(imgFront);
-
   }
-
 }
