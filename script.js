@@ -76,21 +76,10 @@ function genereTable(paires) {
   'woman-sea','woman','zebra'];
 
   for ( let j = 1 ; j <= paires ; j++ ) {
-    for (let i = 1 ; i<24 ;i++) {
       rnum = Math.floor( Math.random() * listeImg.length);
-      list.push(listeImg[i]);
+      list.push(listeImg[rnum]);
+      list.push(listeImg[rnum]);
     };
-  } ;
-
-  /*
-  for (let i = 1 ; i <= paires ;i++) {
-    let rnum = Math.floor( Math.random() * listeImg.length);
-    for ( let j = 0 ; j < 2 ; j++) {
-      list.push(listeImg[i]);
-    }
-  };*/
-
-
 
 
   while(list.length >0){
@@ -157,8 +146,8 @@ btnStop.addEventListener("click", function() {
 
 document.getElementById("boutonGo").addEventListener("click", function() 
     {
-      //choixCartes();
-      nbCartes = 3;
+      choixCartes();
+      //nbCartes = 6;
       ctrlExist() // vidage div
       btnStop.style = "visibility : visible";
       document.getElementById("boutonGo").style = "visibility : hidden";
