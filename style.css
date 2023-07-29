@@ -1,61 +1,86 @@
-/* https://www.vincent-barrault.fr/articles/effet-flip-card-avec-css */
-/* https://medium.com/free-code-camp/vanilla-javascript-tutorial-build-a-memory-game-in-30-minutes-e542c4447eae */
 
 
 *,
     ::before,
     ::after {
       box-sizing: border-box;	
-      margin: 0;
-      padding: 0;
+
     }		
 
 body {
+    margin: 0;
+    padding: 0;
     background-color: rgb(50, 50, 50);
     height : 100vh;
+    width : 100vw;
+    font-size: 1.2em;
+}
+
+
+.accueil {
+    background-color : black;
+    width : 95%;
+    height: 100px;
+    margin-left : 20px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center; 
+    
 }
 
 h1 {
-    color : rgb(210, 201, 201);
-    text-align: center;
-    font-size: 50px;
-    margin-top : 20px;
-}
-p {
-    color : white;
-    font-size : 25px;
+    color : red;
+    padding : 5px;
+
+    /* margin-top : 10px; */
 }
 
+
+
 #resultat {
+    border : solid 1px red;
     height : 50px;
     display: flex;
     justify-content: center;
     padding-top : 10px;
 }
-legend {
-    color : white;
+
+
+
+@media screen and ( max-width : 375px ) {
+
+    body {
+        background-color: blue;
+    }
+
+
+
 }
+
+
+
+
+
+
+
+
+p {
+    color : white;
+    font-size : 25px;
+}
+
 label {
     color : white;
     cursor : pointer;
     /* line-height : 2; */
     display:inline-block;
     font-size : 20px;
-    width:30px;
+    width:auto;
     height:30px;
     margin:1px 10px 0 0;
     vertical-align:middle;
 }
 
-.accueil {
-    background-color : rgb(55, 55, 55);
-    width : 95%;
-    height: 100px;
-    margin-left : 50px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center; 
-}
 
 button {
     height : 50px;
@@ -116,14 +141,6 @@ button {
     scale : 1.1;
 }
 
-.card {
-    position: relative;
-    height: 100%;
-    width: 100%;
-    transition: transform .3s ease;
-    transform-style: preserve-3d;
-}
-
 .card-cliquee {
     transform : rotateY(-180deg) scale(1.2);
     pointer-events : none;
@@ -151,3 +168,5 @@ button {
     width: 100%; 
     backface-visibility: hidden;
 }
+
+

@@ -10,7 +10,7 @@ let page = document.getElementById("page");
 let monInterval = null;
 let minute = 0;
 let seconde = 0;
-let afficheTimer = ' Temps : 00:00';
+let afficheTimer = '';
 
 let nbCartes = 0;
 let pairesTrouvees = '';
@@ -18,19 +18,6 @@ let nbCoups = 0;
 
 let cartesRetournees = [];
 
-
-function choixCartes() {
-  let tabRadio = document.querySelectorAll("input");
-  console.log(tabRadio);
-  for (i=0; i< tabRadio.length ; i++) {
-    if (tabRadio[i].checked) {
-      nbCartes = tabRadio[i].value;
-      //console.log('ici');
-    };
-  };
-  //console.log(nbCartes);
-};
-//choixCartes();
 
 function finTimer() {
   clearInterval(monInterval);
@@ -43,7 +30,7 @@ function secondePlus() {
     minute++;
   };
   // sécurité enfant sur le timer....
-  if (minute == 2) {
+  if (minute == 10) {
     finTimer();
   };
   if (seconde<10) {
@@ -64,12 +51,8 @@ function debutTimer() {
 
 function genereTable(paires) {
   /* on remplit le tableau avec des N° au hasard entre 1 et paires  */
+  /* et on fait un nouveau tableau re-mélangé */
   let list = [], resultat = [];
-  // for(let i=1;i<=paires;i++){
-  //   for(let j=0; j<2; j++){
-  //     list.push(i);
-  //   }
-  //  }
 
   let listeImg = ['autumn','beach','cat','dog','eagle','field','flowers','forest','grass','hills','honey','hummingbird','kingfisher','lion','lynx',
   'moon','mountains','owl','rose','sea','sunset','swamp','sweden','tower','tree-mirror','trees','water','waterfall','winnats',
@@ -77,10 +60,12 @@ function genereTable(paires) {
 
   for ( let j = 1 ; j <= paires ; j++ ) {
       rnum = Math.floor( Math.random() * listeImg.length);
-      list.push(listeImg[rnum]);
-      list.push(listeImg[rnum]);
-    };
+      if (!list.includes(listeImg[rnum])) {
+        list.push(listeImg[rnum]);
+        list.push(listeImg[rnum]);
+      };
 
+    };
 
   while(list.length >0){
 
@@ -146,9 +131,9 @@ btnStop.addEventListener("click", function() {
 
 document.getElementById("boutonGo").addEventListener("click", function() 
     {
-      choixCartes();
-      //nbCartes = 6;
-      ctrlExist() // vidage div
+      
+      nbCartes = document.getElementById('selecNbCartes').value;
+      ctrlExist() // vidage div au cas ou 
       btnStop.style = "visibility : visible";
       document.getElementById("boutonGo").style = "visibility : hidden";
 
@@ -177,13 +162,11 @@ function ctrlExist() {
       for (x=0;x<existe.length;x++) {
           existe[x].remove();
           }
-   // On regenere le tableau 'initial' apres vidage de la div
-   // genereTable(nbCartes);
    };
 }
 
 
-// fonction Aymeric
+// fonction avec Aymeric
 function flipCarte(elem){
 
   // si le tableau ne contient pas l'element cliqué, on l'insère ds le tableau
