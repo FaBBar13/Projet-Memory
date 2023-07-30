@@ -3,9 +3,9 @@
 *,
     ::before,
     ::after {
-      box-sizing: border-box;	
+      box-sizing: border-box;
 
-    }		
+    }
 
 body {
     margin: 0;
@@ -13,90 +13,71 @@ body {
     background-color: rgb(50, 50, 50);
     height : 100vh;
     width : 100vw;
-    font-size: 1.2em;
+    font-size: 1.3em;
+}
+h1 {
+    color : red;
 }
 
 
 .accueil {
     background-color : black;
-    width : 95%;
+    width : 100%;
     height: 100px;
-    margin-left : 20px;
+    /* margin-left : 20px; */
     display: flex;
     justify-content: space-evenly;
-    align-items: center; 
-    
-}
+    align-items: center;
 
+}
 h1 {
     color : red;
-    padding : 5px;
-
-    /* margin-top : 10px; */
 }
 
 
-
-#resultat {
-    border : solid 1px red;
-    height : 50px;
-    display: flex;
-    justify-content: center;
-    padding-top : 10px;
-}
-
-
-
-@media screen and ( max-width : 375px ) {
-
-    body {
-        background-color: blue;
-    }
-
-
-
-}
-
-
-
-
-
-
-
-
-p {
+p,label,select {
     color : white;
-    font-size : 25px;
+    font-size : 1.5em;
+    text-align: center;
 }
-
-label {
-    color : white;
-    cursor : pointer;
-    /* line-height : 2; */
-    display:inline-block;
-    font-size : 20px;
-    width:auto;
-    height:30px;
-    margin:1px 10px 0 0;
-    vertical-align:middle;
+select {
+    background-color: black;
 }
-
 
 button {
+    background-color: rgb(0, 255, 81);
     height : 50px;
-    width : 100px;
-    text-align: center;
+    width : 150px;
+    font-size: 1.3em;
+    font-weight: bold;
+    letter-spacing: 3px;
     border-radius : 15px;
-    margin-left : 50px;
+    color: black;
 }
 
 .stop {
     visibility : hidden;
+    background-color: red;
+    margin-right: 10px;
 }
+
+#resultat {
+    background-color: rgb(14, 14, 14);
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#resultat p {
+    margin : 0;
+}
+
 
 .page {
     max-width: 1200px;
-    width : 900px;
+    /* min-width : 900px;   %age ? */
+    
     border : solid 1px black;
     background-color: rgb(45, 45, 45);
     margin : 20px auto ;
@@ -104,31 +85,20 @@ button {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap : 35px; 
-}
-
-.image-carte {
-    width : 100%;
-    min-width : 160px;
-    height : 100%;
-    min-height : 260px; 
-    margin : 10px auto ;
-    object-fit: cover; 
-    object-position : center; 
+    gap : 30px;
 }
 
 .card-container {
     position: relative;
-    flex-shrink: 0; 
-    /* min-width : 160px;  */
-    min-height : 260px; 
-    width : calc(25% - 50px);
-    /* margin-top : 5px; 
+    flex-shrink: 0;
+    /* width : 160px;   */
+    height : 260px; 
+    width : calc(25% - 40px);
+    /* margin-top : 5px;
     margin-bottom : 10px;  */
-    perspective : 1000px;   
-    
-}
+    perspective : 1000px;
 
+}
 .card {
     position: relative;
     height: 100%;
@@ -140,6 +110,35 @@ button {
 .card-container:hover .card:not(.card-win, .card-cliquee ) {
     scale : 1.1;
 }
+.card-front {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    backface-visibility: hidden;
+    transform: rotateY(-180deg);
+}
+.card-back {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    backface-visibility: hidden;
+}
+
+
+.image-carte {
+    width : 100%;
+    height : 100%;
+    /* min-height : 260px;
+    min-width : 160px; */
+
+    margin : 10px auto ;
+    object-fit: cover;
+    object-position : center;
+}
+
+
+
+
 
 .card-cliquee {
     transform : rotateY(-180deg) scale(1.2);
@@ -155,18 +154,66 @@ button {
     pointer-events: none !important;
 }
 
-.card-front {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    backface-visibility: hidden;
-    transform: rotateY(-180deg);
+
+@media screen and ( max-width : 375px ) {
+
+    body {
+        background-color: blue;
+        font-size : 1em;
+    }
+
+    .accueil {
+        height : auto;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    p,label,select {
+        margin : 5px;
+    }
+
+    button {
+        height : 40px;
+        margin-bottom: 8px;
+    }
+
+    #resultat {
+        height :50px;
+        font-size : 0.9em;
+    }
+
+    .page {
+        width : 360px;
+        border : solid 1px black;
+        background-color: black;
+        gap : 20px;
+    }
+    .card-container {
+        height : 180px;
+        /* width : 80px;  */
+        /* width : calc(25% - 20px); */
+
+        /* gap : 10px; */
+        /* perspective : 1000px; */
+        
+    }
+    /* .image-carte {
+        width : 100%;
+        height : 100%;
+        margin : 10px 20px ;
+    } */
+
+     /* .image-carte {
+
+        object-fit: cover;
+        object-position : center;
+    }  */
+
+
+
+
 }
-.card-back {
-    position: absolute;
-    height: 100%;
-    width: 100%; 
-    backface-visibility: hidden;
-}
+
+
 
 

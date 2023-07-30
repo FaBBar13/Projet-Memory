@@ -6,7 +6,7 @@ let score = document.getElementById("score");
 let res = document.getElementById("res");
 let btnStop = document.getElementById("boutonStop");
 let page = document.getElementById("page");
-
+let selecteur = document.getElementById("selecNbCartes");
 let monInterval = null;
 let minute = 0;
 let seconde = 0;
@@ -119,20 +119,22 @@ btnStop.addEventListener("click", function () {
   res.innerText = "...Partie Annulée :-( ...";
   document.getElementById("boutonGo").style = "visibility : visible";
   btnStop.style = "visibility : hidden";
-  // On regenere le tableau 'initial' apres vidage de la div
+  selecteur.disabled = false;
+  selecteur.style = "background-color : black";
+  // On vide le tableau 'initial'
   stkCartes.splice(0, stkCartes.length);
-  genereTable(nbCartes);
-  //pairesTrouvees = -1; // stoppe le timer
   seconde = 0;
   minute = 0;
   nbCoups = 0;
-  //temps.innerHTML =  ' Temps : ' + '0' + minute + ':' + seconde ;
+
 });
 
 document.getElementById("boutonGo").addEventListener("click", function() 
     {
       
       nbCartes = document.getElementById('selecNbCartes').value;
+      selecteur.disabled = true;
+      selecteur.style = "background-color : grey";
       ctrlExist() // vidage div au cas ou 
       btnStop.style = "visibility : visible";
       document.getElementById("boutonGo").style = "visibility : hidden";
@@ -144,7 +146,7 @@ document.getElementById("boutonGo").addEventListener("click", function()
   seconde = 0;
   minute = 0;
   nbCoups = 0;
-  res.innerText = "";
+  res.innerHTML = "";
   pairesTrouvees = nbCartes;
 
   debutTimer();
@@ -202,9 +204,11 @@ function flipCarte(elem){
   if (pairesTrouvees == 0) {
     finTimer();
     document.getElementById("page").style = "border : solid 3px green;";
-    res.style = "font-size:30px;";
+    //res.style = "font-size:30px;";
     res.innerHTML = "...Quel talent ! " + nbCartes + " paires trouvées en " + nbCoups + " coups et en " + minute + " min. et " + seconde + " seconde(s) !!";
     btnStop.style = "visibility : hidden";
+    selecteur.disabled = false;
+    selecteur.style = "background-color : black";
     document.getElementById("boutonGo").style = "visibility : visible";
     console.log('GAME OVER');
   };
